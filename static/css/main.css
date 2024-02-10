@@ -1,0 +1,24 @@
+header {
+    position: sticky;
+    background-color: rgb(56, 65, 90);
+    box-shadow: 0 5px 25px rgb(56, 65, 90);
+}
+
+#block-left {
+    width: 50%;
+    height: 800px;
+    overflow: auto;
+    float: left;
+    padding: 1%;
+}
+#block-right {
+    width: 50%;
+    height: 800px;
+    overflow: auto;
+    float: right;
+    padding: 1%;
+}
+
+body {
+    font-family: Georgia;
+}
