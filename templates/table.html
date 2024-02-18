@@ -6,21 +6,21 @@
 {% block content %}
 <h1>Данные</h1>
 <hr>
-<form id="select_table_form" method="POST" action="{{url_for('table')}}">
+<form id="select_table_form" method="POST" action="{{url_for('table', table_name=table_name, page=1)}}">
     <select name="select_table" class="form-select" aria-label="Default select example">
-        <option value="Вредные вещества" selected>Вредные вещества</option>
-        <option value="Аварии">Аварии</option>
-        <option value="Измерения">Измерения</option>
-        <option value="Метео">Метео</option>
-        <option value="Посты контроля">Посты контроля</option>
-        <option value="Карты">Карты</option>
-        <option value="ИЗАВ">ИЗАВ</option>
+        <option value="Substances" {% if table_name=="Substances": %} selected {% endif %}>Вредные вещества</option>
+        <option value="Incidents" {% if table_name=="Incidents": %} selected {% endif %}>Аварии</option>
+        <option value="Measurements" {% if table_name=="Measurements": %} selected {% endif %}>Измерения</option>
+        <option value="Meteo" {% if table_name=="Meteo": %} selected {% endif %}>Метео</option>
+        <option value="Posts" {% if table_name=="Posts": %} selected {% endif %}>Посты контроля</option>
+        <option value="Maps" {% if table_name=="Maps": %} selected {% endif %}>Карты</option>
+        <option value="EmissionInventories" {% if table_name=="EmissionInventories": %} selected {% endif %}>ИЗАВ</option>
     </select>
     <button type="submit" class="btn btn-default">Go</button>
 </form>
 <hr>
 <h1>
-    {{tableName}}
+    {{table_name_rus}}
     <button class="btn btn-outline-success rounded-circle p-2 lh-1" type="button">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
             <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
@@ -29,6 +29,23 @@
     </button>
 </h1>
 <div class="table-responsive small">
+    {% if pages > 1: %}
+        <td width="10">
+            {% for i in range(1,pages+1) %}
+                <form method="POST" action="{{url_for('table', table_name=table_name, page=i)}}" style="display: inline;">
+                    {% if i == current_page: %}
+                        <button class="btn btn-outline-dark rounded-circle p-1 page_num me-2 mb-2" type="submit">
+                            {{i}}
+                        </button>
+                    {% else: %}
+                        <button class="btn btn-outline-light bg-secondary rounded-circle p-1 page_num me-2 mb-2" type="submit">
+                            {{i}}
+                        </button>
+                    {% endif %}
+                </form>
+            {% endfor %}
+        </td>
+    {% endif %}
     <table class="table table-striped table-sm">
         <thead>
             <tr>
@@ -38,7 +55,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for row in tableData %}
+            {% for row in table_data.items %}
                 <tr>
                     {% for header in headers %}
                         <td>{{row[header]}}</td>

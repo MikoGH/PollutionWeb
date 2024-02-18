@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
-from app import app, db
+from wsgi import app, db
 from tables import Substance
 
 

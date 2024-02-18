@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 # from flask_wtf import wtforms, FlaskForm
 # from wtforms import StringField, PasswordField, SubmitField, EmailField
 # from wtforms.validators import InputRequired, Length, ValidationError
-from app import app, db
+from wsgi import app, db
 from tables import User
 
 

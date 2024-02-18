@@ -22,3 +22,8 @@ header {
 body {
     font-family: Georgia;
 }
+
+.page_num {
+    width: 30px;
+    height: 30px;
+}
