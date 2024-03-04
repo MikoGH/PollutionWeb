@@ -47,7 +47,9 @@ def table(table_name, page):
     if len(table.items) == 0:
         error_text = 'Нет данных в таблице'
         headers = []
+        headers_rus = []
     else:
         error_text = ''
         headers = model.attr()
-    return render_template("table.html", pages=pages, current_page = current_page, headers=headers, table_data=table, table_name=table_name, table_name_rus=table_name_rus, error=error_text)
+        headers_rus = model.attr_rus()
+    return render_template("table.html", pages=pages, current_page = current_page, headers=headers, headers_rus=headers_rus, table_data=table, table_name=table_name, table_name_rus=table_name_rus, error=error_text)

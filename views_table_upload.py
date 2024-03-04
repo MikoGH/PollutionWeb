@@ -1,4 +1,6 @@
 from views_table import *
+from processing import *
+from flask import url_for
 
 @app.route('/table/<string:table_name>/upload/choose_file', methods=['POST', 'GET'])
 def upload_choose_file(table_name):
@@ -29,21 +31,32 @@ def upload_set_columns(table_name):
     table_name_rus = dct_models_rus[table_name]
     model = dct_models[table_name]  # Модель таблицы в зависимости от выбранной пользователем таблицы
     headers = model.attr()
+    headers_rus = model.attr_rus()
 
-    return render_template("upload_set_columns.html", headers=headers, columns=columns, table_name_rus=table_name_rus, sheet=sheet)
+    return render_template("upload_set_columns.html", headers=headers, headers_rus=headers_rus, count_headers=len(headers), columns=columns, table_name=table_name, table_name_rus=table_name_rus, sheet=sheet)
 
 @app.route('/table/<string:table_name>/upload', methods=['POST', 'GET'])
-def upload(table_name, sheet):
+def upload(table_name):
     if not('name' in session):
         return render_template("table_unavailable.html")
     
-    table_name_rus = dct_models_rus[table_name]
+    sheet = request.args['sheet']
     
+    # Чтение сохранённого датафрейма
     df = pd.read_excel('upload.xlsx', sheet_name=sheet)
-    columns = df.columns
     
-    table_name_rus = dct_models_rus[table_name]
     model = dct_models[table_name]  # Модель таблицы в зависимости от выбранной пользователем таблицы
     headers = model.attr()
 
-    return redirect(table, table_name=table_name, page=1)
+    # Новый датафрейм
+    new_df = pd.DataFrame(columns=headers)
+    new_df.drop('id', axis=1)
+
+    # Установить соответствие столбцов
+    # dct = {}
+    for header in headers:
+        if header == 'id': continue
+        new_df[header] = df[request.form[f'{header}_file']]
+    process_meteo(new_df)
+
+    return redirect(url_for('table', table_name=table_name, page=1))

@@ -14,11 +14,11 @@
             </tr>
         </thead>
         <tbody>
-            {% for header in headers %}
+            {% for i in range(1, count_headers) %}
             <tr>
-                <th>{{header}}</th>
+                <th>{{headers_rus[i]}}</th>
                 <th>
-                    <select class="form-select" name="{{header}}_file">
+                    <select class="form-select" name="{{headers[i]}}_file">
                         <option value="">Выбрать</option>
                         {% for column in columns %}
                             <option>{{column}}</option>
@@ -29,5 +29,9 @@
             {% endfor %}
         </tbody>
     </table>
+    
+    <button class="btn btn-outline-dark rounded" type="submit">
+        Загрузить
+    </button>
 </form>
 {% endblock %}
