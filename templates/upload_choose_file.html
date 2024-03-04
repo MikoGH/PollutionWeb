@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block text_table_color %} text-secondary {% endblock %}
+
+
+{% block content %}
+<h1>Загрузить данные в таблицу {{table_name_rus}}</h1>
+<form enctype="multipart/form-data" method="POST" action="{{url_for('upload_set_columns', table_name=table_name)}}" >
+    <p>
+        <input type="file" class="form-control" style="width: 400px;" name="file">
+        <p>
+            Название листа: 
+            <input type="text" class="form-control" style="width: 400px;" name="sheet">
+        </p>
+        <button class="btn btn-outline-dark rounded" type="submit">
+            Далее
+        </button>
+    </p>
+</form>
+<p>{{error}}</p>
+{% endblock %}

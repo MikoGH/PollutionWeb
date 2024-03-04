@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
+import pandas as pd
 from wsgi import app, db
 from tables import Substance, Incident, Measurement, Meteo, Factory, Post, Map, EmissionInventory
 
@@ -50,4 +51,3 @@ def table(table_name, page):
         error_text = ''
         headers = model.attr()
     return render_template("table.html", pages=pages, current_page = current_page, headers=headers, table_data=table, table_name=table_name, table_name_rus=table_name_rus, error=error_text)
-

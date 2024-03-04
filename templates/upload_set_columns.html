@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block text_table_color %} text-secondary {% endblock %}
+
+
+{% block content %}
+<h1>Загрузить данные в таблицу {{table_name_rus}}</h1>
+<form enctype="multipart/form-data" method="POST" action="{{url_for('upload', table_name=table_name, sheet=sheet)}}">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Столбец</th>
+                <th>Соответствующий столбец в файле</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for header in headers %}
+            <tr>
+                <th>{{header}}</th>
+                <th>
+                    <select class="form-select" name="{{header}}_file">
+                        <option value="">Выбрать</option>
+                        {% for column in columns %}
+                            <option>{{column}}</option>
+                        {% endfor %}
+                    </select>
+                </th>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</form>
+{% endblock %}
