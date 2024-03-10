@@ -52,6 +52,32 @@ def read_table(table_name):
     return execute_read_query(query) 
 
 
+# Очистить таблицу
+def clear_table(table_name):
+    query = f"""
+    DELETE FROM {table_name}
+    """
+    execute_query(query) 
+
+
+def to_date_format(value):
+    if '.' in value:
+        return datetime.strptime(value, '%d.%m.%Y %H:%M:%S')
+    if '-' in value:
+        return datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+    
+def get_posts():
+    query = f'''
+    SELECT id, name FROM Posts
+    '''
+    return execute_read_query(query)
+
+def get_substances():
+    query = f'''
+    SELECT id, name FROM Substances
+    '''
+    return execute_read_query(query)
+
 # Обработка и запись датасета Измерения
 def process_measurements(df):
     # clear_table('Measurements')
@@ -62,7 +88,7 @@ def process_measurements(df):
         LIMIT 1;
         '''
         idPost = execute_read_query(query)[0][0]
-        el['windDirection'] = re.findall('[\d,]+', el['windDirection'])
+        el['windDirection'] = re.findall(r'[\d,]+', el['windDirection'])
         if len(el['windDirection']) == 0:
             el['windDirection'] = None
         else:
@@ -72,7 +98,7 @@ def process_measurements(df):
         INSERT INTO
         Measurements (idPost, date, windSpeed, windDirection, pressure, hydrogenSulfide)
         VALUES 
-        ({idPost}, "{el['date']}", {el['windSpeed']}, {el['windDirection']}, {el['pressure']}, {el['hydrogenSulfide']});
+        ({idPost}, "{to_date_format(el['date'])}", {el['windSpeed']}, {el['windDirection']}, {el['pressure']}, {el['hydrogenSulfide']});
         '''
         # execute_query(query) 
     return df
@@ -88,10 +114,97 @@ def process_meteo(df):
         INSERT INTO
         Meteo (date, temperature, pressure, windSpeed, windDirection, humid)
         VALUES
-        ("{el['date']}", {el['temperature']}, {el['pressure']}, {el['windSpeed']}, {el['windDirection']}, {el['humid']});
+        ("{to_date_format(el['date'])}", {el['temperature']}, {el['pressure']}, {el['windSpeed']}, {el['windDirection']}, {el['humid']});
         '''
         execute_query(query) 
     return df
 
+# Обработка и запись датасета вредных веществ
 def process_substances(df):
-    pass
+    # обработка
+    for i, el in df.iterrows():
+        df['mpc'][i] = str(df['mpc'][i]).replace(',', '.')
+        if '/' in df['mpc'][i]:
+            nums = df['mpc'][i].split('/')
+            try:
+                df['mpc'][i] = round(float(nums[0]) / float(nums[1]), 1)
+            except:
+                df['mpc'][i] = None
+    # запись
+    for i, el in df.iterrows():
+        query = f'''
+        INSERT INTO
+        Substances (name, formula, mpc)
+        VALUES
+        ("{el['name']}", "{el['formula']}", {el['mpc']});
+        '''
+        execute_query(query) 
+    return df
+
+# Обработка и запись датасета ИЗАВ
+def process_emissioninventory(df):
+    # запись
+    for i, el in df.iterrows():
+        query = f'''
+        INSERT INTO
+        EmissionInventory (number, type, height, width, diameter, valueAFR, speedAFR, temperatureAFR, concentration, annualEmission, coordinates)
+        VALUES
+        ({el['number']}, "{el['type']}", {el['height']}, {el['width']}, {el['diameter']}, {el['valueAFR']}, {el['speedAFR']}, {el['temperatureAFR']}, {el['concentration']}, {el['annualEmission']}, "{el['coordinates']}");
+        '''
+        execute_query(query) 
+    return df
+
+# Обработка и запись датасета Посты
+def process_posts(df):
+    for i, el in df.iterrows():
+        query = f'''
+        INSERT INTO
+        Posts (name, coordinates, height)
+        VALUES
+        ("{el['name']}", "{el['coordinates']}", {el['height']});
+        '''
+        execute_query(query) 
+    return df
+
+# Обработка и запись датасета Аварии
+def process_incidents(df):
+    for i, el in df.iterrows():
+        clear_table('Incidents')
+        query = f'''
+        SELECT id, name FROM Posts
+        WHERE name = "{el['idPost']}"
+        LIMIT 1;
+        '''
+        idPost = execute_read_query(query)[0][0]
+        query = f'''
+        SELECT id, name FROM Substances
+        WHERE name = "{el['idSubstance']}"
+        LIMIT 1;
+        '''
+        idSubstance = execute_read_query(query)[0][0]
+        query = f'''
+        INSERT INTO
+        Incidents (date, idPost, idSubstance)
+        VALUES
+        ("{to_date_format(el['date'])}", "{idPost}", {idSubstance});
+        '''
+        execute_query(query) 
+    return df 
+
+    
+# def change_date_format():
+#     query = f'''
+#     SELECT id, date FROM Measurements
+#     '''
+#     df = execute_read_query(query)
+#     for el in df:
+#         if '-' in el[1]:
+#             continue
+#         date = to_date_format(el[1])
+#         # print(el)
+#         query = f'''
+#         UPDATE Measurements
+#         SET date = "{date}"
+#         WHERE id = {el[0]};
+#         '''
+#         execute_query(query) 

@@ -14,7 +14,7 @@ class Substance(db.Model):
     def attr():
         return ['name', 'formula', 'mpc']
     def attr_rus():
-        return ['вещество', 'формула', 'mpc']
+        return ['вещество', 'формула', 'ПДК']
     
 
 class Factory(db.Model):

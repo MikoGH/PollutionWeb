@@ -17,9 +17,29 @@
             {% for i in range(0, count_headers) %}
             <tr>
                 <th>{{headers_rus[i]}}</th>
+                {% if headers[i] == 'idSubstance': %}
+                <th>
+                    <select class="form-select" name="{{headers[i]}}_value">
+                        <option value="">Выбрать</option>
+                        {% for substance in substances %}
+                            <option>{{substance}}</option>
+                        {% endfor %}
+                    </select>                  
+                </th>
+                {% elif headers[i] == 'idPost': %}
+                <th>
+                    <select class="form-select" name="{{headers[i]}}_value">
+                        <option value="">Выбрать</option>
+                        {% for post in posts %}
+                            <option>{{post}}</option>
+                        {% endfor %}
+                    </select>                  
+                </th>
+                {% else: %}
                 <th>
                     <input type="text" class="form-control" style="width: 400px;" name="{{headers[i]}}_value">                    
                 </th>
+                {% endif %}
             </tr>
             {% endfor %}
         </tbody>

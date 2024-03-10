@@ -32,12 +32,14 @@
             </button>
         </form>
     {% else: %}
-        <button class="btn btn-outline-success rounded-circle p-2 lh-1" type="submit">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
-            </svg>
-            <span class="visually-hidden">Добавить</span>
-        </button>
+        <form method="POST" action="{{url_for('upload_choose_values', table_name=table_name)}}" style="display: inline;">
+            <button class="btn btn-outline-success rounded-circle p-2 lh-1" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"/>
+                </svg>
+                <span class="visually-hidden">Добавить</span>
+            </button>
+        </form>
     {% endif %}
 </h1>
 <div class="table-responsive small">
@@ -70,7 +72,13 @@
             {% for row in table_data.items %}
                 <tr>
                     {% for header in headers %}
-                        <td>{{row[header]}}</td>
+                        {% if header == 'idPost': %}
+                            <td>{{dct_posts[row[header]]}}</td>
+                        {% elif header == 'idSubstance': %}
+                            <td>{{dct_substances[row[header]]}}</td>
+                        {% else: %}
+                            <td>{{row[header]}}</td>
+                        {% endif %}
                     {% endfor %}
                     {% if table_name != "Measurements" and table_name != "Meteo": %}
                         <td width="20">
