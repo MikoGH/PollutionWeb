@@ -5,7 +5,7 @@ from tables import Substance, Incident, Measurement, Meteo, Factory, Post, Map, 
 
 
 @app.route('/table/<string:table_name>/add', methods=['POST', 'GET'])
-def upload_choose_values(table_name):
+def add_choose_values(table_name):
     if not('name' in session):
         return render_template("table_unavailable.html")
     
@@ -30,19 +30,14 @@ def add(table_name):
 
     # Новый датафрейм
     new_df = pd.DataFrame(columns=headers)
-    # new_df.drop('id', axis=1)
+    new_df.drop('id', axis=1)
 
     # Установить соответствие столбцов
     line = []
     for header in headers:
         if header == 'id': continue
-        # new_df.loc[header, -1] = request.form[f'{header}_value']
-        # line.update({header : request.form[f'{header}_value']})
         line.append(request.form[f'{header}_value'])
-    # new_df = new_df.append(line, ignore_index = True)
-    # new_df = new_df.append(line)
     new_df.loc[len(new_df)] = line
-    print(new_df)
 
     if model == Substance:
         process_substances(new_df)

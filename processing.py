@@ -45,11 +45,18 @@ def execute_read_query(query):
 
 
 # Считать и вернуть таблицу
-def read_table(table_name):
-    query = f"""
-    SELECT * FROM {table_name}
-    """
+def read_table(table_name, id=-1):
+    if id == -1:
+        query = f"""
+        SELECT * FROM {table_name}
+        """
+    else:
+        query = f"""
+        SELECT * FROM {table_name}
+        WHERE id = {id}
+        """
     return execute_read_query(query) 
+
 
 
 # Очистить таблицу
@@ -169,7 +176,6 @@ def process_posts(df):
 # Обработка и запись датасета Аварии
 def process_incidents(df):
     for i, el in df.iterrows():
-        clear_table('Incidents')
         query = f'''
         SELECT id, name FROM Posts
         WHERE name = "{el['idPost']}"
@@ -208,3 +214,79 @@ def process_incidents(df):
 #         WHERE id = {el[0]};
 #         '''
 #         execute_query(query) 
+
+# Изменение датасета вредных веществ
+def edit_substances(df):
+    # обработка
+    for i, el in df.iterrows():
+        df['mpc'][i] = str(df['mpc'][i]).replace(',', '.')
+        if '/' in df['mpc'][i]:
+            nums = df['mpc'][i].split('/')
+            try:
+                df['mpc'][i] = round(float(nums[0]) / float(nums[1]), 1)
+            except:
+                df['mpc'][i] = None
+    # запись
+    for i, el in df.iterrows():
+        query = f'''
+        UPDATE Substances 
+        SET name="{el['name']}", formula="{el['formula']}", mpc={el['mpc']})
+        WHERE id = {el['id']};
+        '''
+        execute_query(query) 
+    return df
+
+# Изменение датасета ИЗАВ
+def edit_emissioninventory(df):
+    # запись
+    for i, el in df.iterrows():
+        query = f'''
+        UPDATE EmissionInventory 
+        SET number={el['number']}, type="{el['type']}", height={el['height']}, width={el['width']}, diameter={el['diameter']}, valueAFR={el['valueAFR']}, speedAFR={el['speedAFR']}, temperatureAFR={el['temperatureAFR']}, concentration={el['concentration']}, annualEmission={el['annualEmission']}, coordinates="{el['coordinates']}"
+        WHERE id = {el['id']};
+        '''
+        execute_query(query) 
+    return df
+
+# Изменение датасета Посты
+def edit_posts(df):
+    for i, el in df.iterrows():
+        query = f'''
+        UPDATE Posts 
+        SET name = "{el['name']}", coordinates = "{el['coordinates']}", height ={el['height']}
+        WHERE id = {el['id']};
+        '''
+        execute_query(query) 
+    return df
+
+# Изменение датасета Аварии
+def edit_incidents(df):
+    for i, el in df.iterrows():
+        query = f'''
+        SELECT id, name FROM Posts
+        WHERE name = "{el['idPost']}"
+        LIMIT 1;
+        '''
+        idPost = execute_read_query(query)[0][0]
+        query = f'''
+        SELECT id, name FROM Substances
+        WHERE name = "{el['idSubstance']}"
+        LIMIT 1;
+        '''
+        idSubstance = execute_read_query(query)[0][0]
+        query = f'''
+        UPDATE Incidents
+        SET date = "{to_date_format(el['date'])}", idPost = {idPost}, idSubstance = {idSubstance}
+        WHERE id = {el['id']};
+        '''
+        execute_query(query) 
+    return df 
+
+
+# Изменение датасета вредных веществ
+def delete_from_table(table_name, id):
+    query = f'''
+    DELETE FROM {table_name} 
+    WHERE id = {id};
+    '''
+    execute_query(query) 

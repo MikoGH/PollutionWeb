@@ -12,9 +12,9 @@ class Substance(db.Model):
     mpc = db.Column(db.Double(), nullable=False)
 
     def attr():
-        return ['name', 'formula', 'mpc']
+        return ['id', 'name', 'formula', 'mpc']
     def attr_rus():
-        return ['вещество', 'формула', 'ПДК']
+        return ['id', 'вещество', 'формула', 'ПДК']
     
 
 class Factory(db.Model):
@@ -24,9 +24,9 @@ class Factory(db.Model):
     type = db.Column(db.Text(), nullable=False)
 
     def attr():
-        return ['address', 'type']
+        return ['id', 'address', 'type']
     def attr_rus():
-        return ['адрес', 'тип']
+        return ['id', 'адрес', 'тип']
     
 
 class Post(db.Model):
@@ -37,9 +37,9 @@ class Post(db.Model):
     height = db.Column(db.Float(), nullable=False)
 
     def attr():
-        return ['name', 'coordinates', 'height']
+        return ['id', 'name', 'coordinates', 'height']
     def attr_rus():
-        return ['пост', 'координаты', 'высота']
+        return ['id', 'пост', 'координаты', 'высота']
     
 
 class Incident(db.Model):
@@ -50,9 +50,9 @@ class Incident(db.Model):
     idPost = db.Column(db.Integer(), nullable=False)
 
     def attr():
-        return ['date', 'idSubstance', 'idPost']
+        return ['id', 'date', 'idSubstance', 'idPost']
     def attr_rus():
-        return ['дата', 'вещество', 'пост']
+        return ['id', 'дата', 'вещество', 'пост']
     
 
 class Map(db.Model):
@@ -62,9 +62,9 @@ class Map(db.Model):
     coordinates = db.Column(db.Text(), nullable=False)
 
     def attr():
-        return ['imagePath', 'coordinates']
+        return ['id', 'imagePath', 'coordinates']
     def attr_rus():
-        return ['путь', 'координаты']
+        return ['id', 'путь', 'координаты']
     
 
 class Meteo(db.Model):
@@ -98,9 +98,9 @@ class EmissionInventory(db.Model):
     coordinates = db.Column(db.Text(), nullable=False)
 
     def attr():
-        return ['number', 'type', 'height', 'diameter', 'valueAFR', 'speedAFR', 'temperatureAFR', 'concentration', 'annualEmission', 'coordinates']
+        return ['id', 'number', 'type', 'height', 'diameter', 'valueAFR', 'speedAFR', 'temperatureAFR', 'concentration', 'annualEmission', 'coordinates']
     def attr_rus():
-        return ['номер', 'тип', 'высота источника', 'диаметр', 'объём ГВС', 'скорость выхода ГВС', 'температура ГВС', 'концентрация', 'суммарные годовые выбросы', 'координаты']
+        return ['id', 'номер', 'тип', 'высота источника', 'диаметр', 'объём ГВС', 'скорость выхода ГВС', 'температура ГВС', 'концентрация', 'суммарные годовые выбросы', 'координаты']
 
 class Measurement(db.Model):
     __tablename__ = 'Measurements'
@@ -126,9 +126,9 @@ class User(db.Model):
     password = db.Column(db.Text(), nullable=False)
 
     def attr():
-        return ['name', 'email', 'password']
+        return ['id', 'name', 'email', 'password']
     def attr_rus():
-        return ['имя', 'почта', 'пароль']
+        return ['id', 'имя', 'почта', 'пароль']
     
     def __init__(self, name, email, password):
         self.name=name

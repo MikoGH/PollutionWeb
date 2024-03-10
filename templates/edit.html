@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block text_table_color %} text-secondary {% endblock %}
+
+
+{% block content %}
+<h1>Добавить данные в таблицу {{table_name_rus}}</h1>
+<form enctype="multipart/form-data" method="POST" action="{{url_for('edit', table_name=table_name, sheet=sheet, id=dct_values['id'])}}">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>Столбец</th>
+                <th>Данные</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in range(1, count_headers) %}
+            <tr>
+                <th>{{headers_rus[i]}}</th>
+                {% if headers[i] == 'idSubstance': %}
+                <th>
+                    <select class="form-select" name="{{headers[i]}}_value">
+                        {% for substance_id in dct_substances.keys() %}
+                            {% if substance_id == dct_values['idSubstance']: %}
+                                <option selected>{{dct_substances[substance_id]}}</option>
+                            {% else: %}
+                                <option>{{dct_substances[substance_id]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>                  
+                </th>
+                {% elif headers[i] == 'idPost': %}
+                <th>
+                    <select class="form-select" name="{{headers[i]}}_value">
+                        {% for post_id in dct_posts.keys() %}
+                            {% if post_id == dct_values['idPost']: %}
+                                <option selected>{{dct_posts[post_id]}}</option>
+                            {% else: %}
+                                <option>{{dct_posts[post_id]}}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>                  
+                </th>
+                {% else: %}
+                <th>
+                    <input type="text" class="form-control" style="width: 400px;" name="{{headers[i]}}_value" value="{{dct_values[headers[i]]}}">                    
+                </th>
+                {% endif %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <button class="btn btn-outline-dark rounded" type="submit">
+        Изменить
+    </button>
+</form>
+{% endblock %}
