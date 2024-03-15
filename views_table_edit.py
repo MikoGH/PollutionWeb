@@ -2,7 +2,7 @@ from views_table import *
 from processing import *
 from flask import url_for
 from tables import Substance, Incident, Measurement, Meteo, Factory, Post, Map, EmissionInventory
-
+from check import *
 
 @app.route('/table/<string:table_name>/edit/<int:id>', methods=['POST', 'GET'])
 def edit_choose_values(table_name, id):
@@ -38,14 +38,16 @@ def edit(table_name, id):
     if not('name' in session):
         return render_template("table_unavailable.html")
     
+    table_name_rus = dct_models_rus[table_name]
     model = dct_models[table_name]  # Модель таблицы в зависимости от выбранной пользователем таблицы
     headers = model.attr()
-
-    # Проверка на корректность выбранных данных
+    headers_rus = model.attr_rus()
+    posts = [elm[1] for elm in get_posts()]
+    substances = [elm[1] for elm in get_substances()]
 
     # Новый датафрейм
     new_df = pd.DataFrame(columns=headers)
-    # new_df.drop('id', axis=1)
+    # new_df = new_df.drop('id', axis=1)
 
     # Установить соответствие столбцов
     line = []
@@ -65,5 +67,10 @@ def edit(table_name, id):
         edit_posts(new_df)
     if model == EmissionInventory:
         edit_emissioninventory(new_df)
+
+    if check_model(new_df, model):
+        edit_model(new_df, model)
+    else:
+        return render_template("edit.html", headers=headers, headers_rus=headers_rus, count_headers=len(headers), table_name=table_name, table_name_rus=table_name_rus, posts=posts, substances=substances, error='Некорректный ввод')
 
     return redirect(url_for('table', table_name=table_name, page=1))

@@ -5,6 +5,7 @@ from datetime import datetime
 import sqlite3
 from sqlite3 import Error
 import re
+from tables import *
 
 
 # Создать соединение с бд
@@ -290,3 +291,31 @@ def delete_from_table(table_name, id):
     WHERE id = {id};
     '''
     execute_query(query) 
+
+
+# Вызывает соответствующую функцию добавления элементов модели
+def process_model(new_df, model):
+    if model == Substance:
+        process_substances(new_df)
+    if model == Incident:
+        process_incidents(new_df)
+    if model == Post:
+        process_posts(new_df)
+    if model == EmissionInventory:
+        process_emissioninventory(new_df)
+    if model == Measurement:
+        process_measurements(new_df)
+    if model == Meteo:
+        process_meteo(new_df)
+
+
+# Вызывает соответствующую функцию изменения элементов модели
+def edit_model(new_df, model):
+    if model == Substance:
+        edit_substances(new_df)
+    if model == Incident:
+        edit_incidents(new_df)
+    if model == Post:
+        edit_posts(new_df)
+    if model == EmissionInventory:
+        edit_emissioninventory(new_df)

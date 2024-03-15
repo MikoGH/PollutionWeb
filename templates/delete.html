@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block text_table_color %} text-secondary {% endblock %}
+
+
+{% block content %}
+<h1>Удалить данные в таблице {{table_name_rus}}</h1>
+<form enctype="multipart/form-data" method="POST" action="{{url_for('delete', table_name=table_name)}}">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th>С id</th>
+                <th>По id включительно</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th>
+                    <input type="text" class="form-control" style="width: 400px;" name="from_id">                    
+                </th>
+                <th>
+                    <input type="text" class="form-control" style="width: 400px;" name="to_id">                    
+                </th>
+            </tr>
+        </tbody>
+    </table>
+    
+    <button class="btn btn-outline-dark rounded" type="submit">
+        Удалить
+    </button>
+</form>
+{{error}}
+{% endblock %}
