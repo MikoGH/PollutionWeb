@@ -69,6 +69,7 @@ def clear_table(table_name):
 
 
 def to_date_format(value):
+    value = str(value)
     if '.' in value:
         return datetime.strptime(value, '%d.%m.%Y %H:%M:%S')
     if '-' in value:

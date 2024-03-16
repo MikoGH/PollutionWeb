@@ -13,10 +13,9 @@
         <option value="Measurements" {% if table_name=="Measurements": %} selected {% endif %}>Измерения</option>
         <option value="Meteo" {% if table_name=="Meteo": %} selected {% endif %}>Метео</option>
         <option value="Posts" {% if table_name=="Posts": %} selected {% endif %}>Посты контроля</option>
-        <option value="Maps" {% if table_name=="Maps": %} selected {% endif %}>Карты</option>
-        <option value="EmissionInventories" {% if table_name=="EmissionInventories": %} selected {% endif %}>ИЗАВ</option>
+        <option value="EmissionInventory" {% if table_name=="EmissionInventories": %} selected {% endif %}>ИЗАВ</option>
     </select>
-    <button type="submit" class="btn btn-default">Go</button>
+    <button type="submit" class="btn btn-default">Выбрать</button>
 </form>
 <hr>
 <h1>
@@ -109,7 +108,7 @@
                             </form>
                         </td>
                         <td width="20">
-                            <form method="POST" action="{{url_for('delete', table_name=table_name, id=row['id'])}}" style="display: inline;">
+                            <form method="POST" action="{{url_for('delete_one', table_name=table_name, id=row['id'])}}" style="display: inline;">
                                 <button class="btn btn-outline-danger rounded-circle p-2 lh-1" type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
                                         <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8z"/>
