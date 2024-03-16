@@ -193,7 +193,7 @@ def process_incidents(df):
         INSERT INTO
         Incidents (date, idPost, idSubstance)
         VALUES
-        ("{to_date_format(el['date'])}", "{idPost}", {idSubstance});
+        ("{to_date_format(el['date'])}", {idPost}, {idSubstance});
         '''
         execute_query(query) 
     return df 
@@ -231,7 +231,7 @@ def edit_substances(df):
     for i, el in df.iterrows():
         query = f'''
         UPDATE Substances 
-        SET name="{el['name']}", formula="{el['formula']}", mpc={el['mpc']})
+        SET name="{el['name']}", formula="{el['formula']}", mpc={el['mpc']}
         WHERE id = {el['id']};
         '''
         execute_query(query) 

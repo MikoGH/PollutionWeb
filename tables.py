@@ -98,9 +98,9 @@ class EmissionInventory(db.Model):
     coordinates = db.Column(db.Text(), nullable=False)
 
     def attr():
-        return ['id', 'number', 'type', 'height', 'diameter', 'valueAFR', 'speedAFR', 'temperatureAFR', 'concentration', 'annualEmission', 'coordinates']
+        return ['id', 'number', 'type', 'height', 'width', 'diameter', 'valueAFR', 'speedAFR', 'temperatureAFR', 'concentration', 'annualEmission', 'coordinates']
     def attr_rus():
-        return ['id', 'номер', 'тип', 'высота источника', 'диаметр', 'объём ГВС', 'скорость выхода ГВС', 'температура ГВС', 'концентрация', 'суммарные годовые выбросы', 'координаты']
+        return ['id', 'номер', 'тип', 'высота источника', 'ширина', 'диаметр', 'объём ГВС', 'скорость выхода ГВС', 'температура ГВС', 'концентрация', 'суммарные годовые выбросы', 'координаты']
 
 class Measurement(db.Model):
     __tablename__ = 'Measurements'

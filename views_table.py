@@ -12,7 +12,7 @@ dct_models = {
     'Meteo' : Meteo,
     'Posts' : Post,
     'Maps' : Map,
-    'EmissionInventories' : EmissionInventory
+    'EmissionInventory' : EmissionInventory
 }
 
 dct_models_rus = {
@@ -22,7 +22,7 @@ dct_models_rus = {
     'Meteo' : 'Метео',
     'Posts' : 'Посты контроля',
     'Maps' : 'Карты',
-    'EmissionInventories' : 'ИЗАВ'
+    'EmissionInventory' : 'ИЗАВ'
 }
 
 @app.route('/table/<string:table_name>/<int:page>', methods=['POST', 'GET'])
