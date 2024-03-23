@@ -71,6 +71,21 @@ def edit(table_name, id):
     if check_model(new_df, model):
         edit_model(new_df, model)
     else:
-        return render_template("edit.html", headers=headers, headers_rus=headers_rus, count_headers=len(headers), table_name=table_name, table_name_rus=table_name_rus, posts=posts, substances=substances, error='Некорректный ввод')
+        # Posts
+        posts = get_posts()
+        dct_posts = {}
+        for post in posts:
+            dct_posts.update({post[0] : post[1]})
+        # Substances
+        substances = get_substances()
+        dct_substances = {}
+        for substance in substances:
+            dct_substances.update({substance[0] : substance[1]})
+        # Считывание данных
+        table = read_table(table_name, id=id)[0]
+        dct_values = {}
+        for i, header in enumerate(headers):
+            dct_values.update({header : table[i]})
+        return render_template("edit.html", dct_values=dct_values, headers=headers, headers_rus=headers_rus, count_headers=len(headers), table_name=table_name, table_name_rus=table_name_rus, posts=posts, substances=substances, dct_posts=dct_posts, dct_substances=dct_substances, error='Некорректный ввод')
 
     return redirect(url_for('table', table_name=table_name, page=1))
